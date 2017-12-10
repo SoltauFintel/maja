@@ -1,0 +1,16 @@
+port=8080
+
+
+# The following entries are necessary for the FacebookFeature/GoogleFeature of maja-auth and must be filled.
+
+host=http://localhost:8080
+
+facebook.state=secret
+facebook.key=
+facebook.secret=
+facebook.url=https://graph.facebook.com/v2.8/me
+
+google.state=secret2
+google.key=
+google.secret=
+google.url=https://www.googleapis.com/plus/v1/people/me
