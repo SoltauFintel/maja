@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<project name="maja-web" basedir="." default="build">
+
+	<target name="build">
+		<gradle task="build"/>
+	</target>
+	<target name="eclipse">
+		<gradle task="eclipse"/>
+	</target>
+
+	<macrodef name="gradle">
+		<attribute name="task"/>
+		<sequential>
+	        <exec executable="cmd" failonerror="true">
+	        	<arg line="/c gradlew.bat -g C:\jarcache\gradle @{task}"/>
+	        </exec>
+		</sequential>
+	</macrodef>
+	
+</project>
