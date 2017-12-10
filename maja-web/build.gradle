@@ -1,33 +1,8 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'maven'
-
-group = 'de.mwvb.maja'
-version = '0.2.0'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-compileJava.options.encoding = 'windows-1252'
-compileTestJava.options.encoding = 'windows-1252'
-
 dependencies {
 	compile 'com.sparkjava:spark-core:2.7.1'
-	compile 'org.slf4j:slf4j-simple:1.7.25'
 	compile 'com.sparkjava:spark-template-velocity:2.7.1'
+	compile 'org.slf4j:slf4j-simple:1.7.25'
 	compile 'com.google.guava:guava:21.0'
 	compile 'org.tinylog:tinylog:1.2'
 	compile 'org.quartz-scheduler:quartz:2.3.0'
-}
-
-repositories {
-	mavenCentral()
-}
-
-task sourcesJar(type: Jar) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
-}
-
-artifacts {
-	archives sourcesJar
 }

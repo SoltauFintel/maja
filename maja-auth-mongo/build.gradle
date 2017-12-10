@@ -1,0 +1,4 @@
+dependencies {
+	compile project(':maja-auth')
+	compile project(':maja-mongo')
+}

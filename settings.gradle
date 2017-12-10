@@ -1,0 +1,5 @@
+include 'maja-web'
+include 'maja-mongo'
+include 'maja-auth'
+include 'maja-auth-mongo'
+include 'maja-redis'

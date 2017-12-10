@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1252"?>
-<project name="maja-web" basedir="." default="build">
+<project name="maja" basedir=".." default="build">
 
 	<target name="build">
 		<gradle task="build"/>

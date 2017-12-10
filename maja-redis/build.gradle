@@ -1,0 +1,6 @@
+dependencies {
+	compile 'redis.clients:jedis:2.9.0'
+	compile 'org.tinylog:tinylog:1.2'
+	
+	testCompile 'junit:junit:4.12'
+}
