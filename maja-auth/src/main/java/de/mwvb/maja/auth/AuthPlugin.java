@@ -136,10 +136,14 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 				return;
 			}
 			req.session().attribute("uri", uri); // Go back to this page after login
-			Map<String, Object> model = new HashMap<>();
-			ModelAndView mv = new ModelAndView(model, Action.folder + "login" + Action.suffix);
-			halt(HttpStatus.UNAUTHORIZED_401, Template.render(mv));
+			halt(HttpStatus.UNAUTHORIZED_401, renderLoginPage());
 		}
+	}
+	
+	protected String renderLoginPage() {
+		Map<String, Object> model = new HashMap<>();
+		ModelAndView mv = new ModelAndView(model, Action.folder + "login" + Action.suffix);
+		return Template.render(mv);
 	}
 	
 	/**
