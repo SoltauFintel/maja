@@ -5,6 +5,7 @@ dependencies {
 	compile 'org.eclipse.jetty:jetty-webapp:9.4.8.v20171121'
 	compile 'org.eclipse.jetty:jetty-client:9.4.8.v20171121'
 	compile 'org.slf4j:slf4j-simple:1.7.25'
+
 	compile 'com.google.guava:guava:21.0'
 	compile 'org.tinylog:tinylog:1.2'
 	compile 'org.quartz-scheduler:quartz:2.3.0'
