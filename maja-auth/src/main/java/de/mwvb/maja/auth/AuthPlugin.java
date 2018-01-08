@@ -126,7 +126,7 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 		return session.attribute(USERID_ATTR);
 	}
 
-	static void setLoginData(boolean loggedIn, String name, String id, Session session) {
+	public static void setLoginData(boolean loggedIn, String name, String id, Session session) {
 		session.attribute(LOGGED_IN, loggedIn ? LOGGED_IN_YES : null);
 		session.attribute(USER_ATTR, name);
 		session.attribute(USERID_ATTR, id);
@@ -172,7 +172,9 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 		String longId = service + "#" + foreignId;
 		setLoginData(true, name, longId, req.session());
 		rememberMe.rememberMe(rememberMeWanted, res, name, longId);
-		logLogin(name, longId);
+		if (isDebugLogging()) {
+			logLogin(name, longId);
+		}
 
 		// Redirect zur ursprünglich angewählten Seite
 		String uri = req.session().attribute("uri");
@@ -184,10 +186,8 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 		return "";
 	}
 	
-	protected void logLogin(String name, String longId) {
-		if (isDebugLogging()) {
-			Logger.debug("Login: " + name + " (" + longId + ")");
-		}
+	protected void logLogin(String name, String userId) {
+		Logger.debug("Login: " + name + " (" + userId + ")");
 	}
 
 	public boolean isDebugLogging() {

@@ -20,12 +20,16 @@ public class LogoutAction extends ActionBase {
 		Session session = req.session();
 		String userId = AuthPlugin.getUserId(session);
 		if (userId != null && isDebugLogging) {
-			Logger.debug("Logout: " + AuthPlugin.getUser(session) + " (" + userId + ")");
+			logLogout(AuthPlugin.getUser(session), userId);
 		}
 		rememberMe.forget(res, userId);
 		AuthPlugin.setLoginData(false, null, null, session);
 		
 		res.redirect("/");
 		return "";
+	}
+	
+	protected void logLogout(String user, String userId) {
+		Logger.debug("Logout: " + user + " (" + userId + ")");
 	}
 }
