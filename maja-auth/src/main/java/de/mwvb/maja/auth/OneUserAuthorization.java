@@ -7,6 +7,7 @@ import spark.Request;
 import spark.Response;
 
 public class OneUserAuthorization implements Authorization {
+	public static boolean errorLogging = true;
 	private final String userId;
 	private final String service;
 	
@@ -29,7 +30,9 @@ public class OneUserAuthorization implements Authorization {
 	}
 	
 	public static String notAuthorized(Response res, String name, String foreignId, String service) {
-		Logger.error("Not authorized: " + name + " (" + foreignId + "@" + service + ")");
+		if (errorLogging) {
+			Logger.error("Not authorized: " + name + " (" + foreignId + "@" + service + ")");
+		}
 		res.status(HttpStatus.FORBIDDEN_403);
 		throw new RuntimeException("You are not authorized to use this web application.");
 	}

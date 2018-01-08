@@ -8,16 +8,18 @@ import spark.Session;
 
 public class LogoutAction extends ActionBase {
 	private final RememberMeFeature rememberMe;
-
-	public LogoutAction(RememberMeFeature rememberMe) {
+	private final boolean isDebugLogging;
+	
+	public LogoutAction(RememberMeFeature rememberMe, boolean isDebugLogging) {
 		this.rememberMe = rememberMe;
+		this.isDebugLogging = isDebugLogging;
 	}
 	
 	@Override
 	public String run() {
 		Session session = req.session();
 		String userId = AuthPlugin.getUserId(session);
-		if (userId != null) {
+		if (userId != null && isDebugLogging) {
 			Logger.debug("Logout: " + AuthPlugin.getUser(session) + " (" + userId + ")");
 		}
 		rememberMe.forget(res, userId);

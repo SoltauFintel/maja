@@ -19,6 +19,7 @@ import de.mwvb.maja.auth.rememberme.IKnownUser;
 import de.mwvb.maja.auth.rememberme.NoOpRememberMeFeature;
 import de.mwvb.maja.auth.rememberme.RememberMeFeature;
 import de.mwvb.maja.web.Action;
+import de.mwvb.maja.web.ActionBase;
 import de.mwvb.maja.web.AppConfig;
 import de.mwvb.maja.web.Template;
 import spark.Filter;
@@ -32,14 +33,15 @@ import spark.Session;
  */
 public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 	public static final String USER_ATTR = "user";
-	private static final String LOGGED_IN = "logged_in";
-	private static final String LOGGED_IN_YES = "yes";
-	private static final String USERID_ATTR = "user_id";
-	private final Set<String> notProtected = new HashSet<>();
-	private final Authorization authorization;
-	private final AuthFeature feature;
-	private final RememberMeFeature rememberMe;
-
+	public static final String LOGGED_IN = "logged_in";
+	public static final String LOGGED_IN_YES = "yes";
+	public static final String USERID_ATTR = "user_id";
+	protected final Set<String> notProtected = new HashSet<>();
+	protected final Authorization authorization;
+	protected final AuthFeature feature;
+	protected final RememberMeFeature rememberMe;
+	private boolean debugLogging = true;
+	
 	/** No remember-me constructor */
 	public AuthPlugin() {
 		this(new NoOpRememberMeFeature());
@@ -78,11 +80,11 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 		}
 	}
 	
-	private boolean hasGoogle() {
+	protected boolean hasGoogle() {
 		return new AppConfig().hasFilledKey("google.key");
 	}
 	
-	private boolean hasFacebook() {
+	protected boolean hasFacebook() {
 		return new AppConfig().hasFilledKey("facebook.key");
 	}
 	
@@ -106,10 +108,14 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 			before(this);
 
 			addNotProtected("/logout");
-			Action.get("/logout", new LogoutAction(rememberMe));
+			Action.get("/logout", getLogoutAction(rememberMe));
 			
 			feature.routes();
 		}
+	}
+	
+	protected ActionBase getLogoutAction(RememberMeFeature rememberMe) {
+		return new LogoutAction(rememberMe, isDebugLogging());
 	}
 
 	public static String getUser(Session session) {
@@ -166,7 +172,7 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 		String longId = service + "#" + foreignId;
 		setLoginData(true, name, longId, req.session());
 		rememberMe.rememberMe(rememberMeWanted, res, name, longId);
-		Logger.debug("Login: " + name + " (" + longId + ")");
+		logLogin(name, longId);
 
 		// Redirect zur ursprünglich angewählten Seite
 		String uri = req.session().attribute("uri");
@@ -176,5 +182,19 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 		req.session().removeAttribute("uri");
 		res.redirect(uri);
 		return "";
+	}
+	
+	protected void logLogin(String name, String longId) {
+		if (isDebugLogging()) {
+			Logger.debug("Login: " + name + " (" + longId + ")");
+		}
+	}
+
+	public boolean isDebugLogging() {
+		return debugLogging;
+	}
+
+	public void setDebugLogging(boolean debugLogging) {
+		this.debugLogging = debugLogging;
 	}
 }
