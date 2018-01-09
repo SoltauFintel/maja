@@ -10,8 +10,8 @@ import spark.Response;
 public class RememberMeInMongoDB implements RememberMeFeature {
 	// https://stackoverflow.com/a/5083809/3478021
 	
-	private final KnownUserDAO dao;
-	private final Cookie cookie;
+	protected final KnownUserDAO dao;
+	protected final Cookie cookie;
 	
 	public RememberMeInMongoDB() {
 		dao = new KnownUserDAO();
@@ -54,9 +54,13 @@ public class RememberMeInMongoDB implements RememberMeFeature {
 		if (ku == null) {
 			cookie.remove(res);
 		} else {
-			Logger.debug("Remembered user: " + ku.getUser() + " (" + ku.getUserId() + ")");
+			logRememberedUser(ku.getUser(), ku.getUserId());
 			cookie.extendLifeTime(ku.getId(), res);
 		}
 		return ku;
+	}
+	
+	protected void logRememberedUser(String user, String userId) {
+		Logger.debug("Remembered user: " + user + " (" + userId + ")");
 	}
 }
