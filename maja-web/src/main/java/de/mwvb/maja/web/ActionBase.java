@@ -10,6 +10,7 @@ import spark.Response;
  * Use this class for pageless actions, e.g. save actions that redirect to another page.
  */
 public abstract class ActionBase {
+	public static Escaper escaper = new Escaper();
 	protected Request req;
 	protected Response res;
 
@@ -18,5 +19,21 @@ public abstract class ActionBase {
 		this.res = res;
 	}
 	
-	public abstract String run();
+	public String run() {
+		execute();
+		return render();
+	}
+	
+	protected abstract void execute();
+	
+	protected String render() {
+		return "";
+	}
+
+	protected String esc(String text) {
+		if (text == null) {
+			return "";
+		}
+		return escaper.esc(text);
+	}
 }

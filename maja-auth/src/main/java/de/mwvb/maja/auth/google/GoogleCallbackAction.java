@@ -86,4 +86,8 @@ public class GoogleCallbackAction extends ActionBase {
 			this.id = id;
 		}
 	}
+
+	@Override
+	protected void execute() {
+	}
 }

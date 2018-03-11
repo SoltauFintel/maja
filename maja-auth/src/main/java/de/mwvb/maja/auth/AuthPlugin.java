@@ -3,13 +3,13 @@ package de.mwvb.maja.auth;
 import static spark.Spark.before;
 import static spark.Spark.halt;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jetty.http.HttpStatus;
 import org.pmw.tinylog.Logger;
+
+import com.github.template72.data.DataMap;
 
 import de.mwvb.maja.auth.facebook.FacebookAuthorization;
 import de.mwvb.maja.auth.facebook.FacebookFeature;
@@ -21,9 +21,7 @@ import de.mwvb.maja.auth.rememberme.RememberMeFeature;
 import de.mwvb.maja.web.Action;
 import de.mwvb.maja.web.ActionBase;
 import de.mwvb.maja.web.AppConfig;
-import de.mwvb.maja.web.Template;
 import spark.Filter;
-import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Session;
@@ -147,9 +145,7 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
 	}
 	
 	protected String renderLoginPage() {
-		Map<String, Object> model = new HashMap<>();
-		ModelAndView mv = new ModelAndView(model, Action.folder + "login" + Action.suffix);
-		return Template.render(mv);
+		return Action.templates.render("login", new DataMap());
 	}
 	
 	/**

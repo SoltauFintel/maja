@@ -84,4 +84,8 @@ public class FacebookCallbackAction extends ActionBase {
 			this.id = id;
 		}
 	}
+
+	@Override
+	protected void execute() {
+	}
 }

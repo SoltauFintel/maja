@@ -1,9 +1,14 @@
 package de.mwvb.maja.web;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
-import spark.ModelAndView;
+import org.pmw.tinylog.Logger;
+
+import com.github.template72.compiler.CompiledTemplates;
+import com.github.template72.data.DataList;
+import com.github.template72.data.DataMap;
+
 import spark.Spark;
 
 /**
@@ -11,28 +16,30 @@ import spark.Spark;
  * Use put() to add data within execute().
  */
 public abstract class Action extends ActionBase {
-	public static String folder = "templates/";
-	public static String suffix = ".html";
-	public static Escaper escaper = new Escaper();
-	protected final Map<String, Object> model = new HashMap<>();
+	public static CompiledTemplates templates;
+	protected final DataMap model = new DataMap();
 	
-	public void put(String name, Object value) {
-		model.put(name, value);
+	public void put(String name, String text) {
+		model.put(name, text);
+	}
+
+	public void put(String name, boolean condition) {
+		model.put(name, condition);
+	}
+	
+	public DataList list(String name) {
+		return model.list(name);
 	}
 
 	@Override
-	public String run() {
-		put("T", escaper);
-		execute();
-		return Template.render(new ModelAndView(model, getPage()));
+	protected String render() {
+		return templates.render(getPage(), model);
 	}
-	
-	protected abstract void execute();
 
 	public String getPage() {
-		return folder + getClass().getSimpleName().toLowerCase() + suffix;
+		return this.getClass().getSimpleName().toLowerCase();
 	}
-	
+
 	public static void get(String path, Class<? extends ActionBase> actionClass) {
 		Spark.get(path, (req, res) -> {
 			ActionBase action = actionClass.newInstance();
@@ -46,5 +53,14 @@ public abstract class Action extends ActionBase {
 			action.init(req, res);
 			return action.run();
 		});
+	}
+	
+	public static String urlEncode(String text, String fallback) {
+		try {
+			return URLEncoder.encode(text, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			Logger.error(e);
+			return fallback;
+		}
 	}
 }

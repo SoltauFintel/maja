@@ -16,7 +16,7 @@ public class LogoutAction extends ActionBase {
 	}
 	
 	@Override
-	public String run() {
+	protected void execute() {
 		Session session = req.session();
 		String userId = AuthPlugin.getUserId(session);
 		if (userId != null && isDebugLogging) {
@@ -26,7 +26,6 @@ public class LogoutAction extends ActionBase {
 		AuthPlugin.setLoginData(false, null, null, session);
 		
 		res.redirect("/");
-		return "";
 	}
 	
 	protected void logLogout(String user, String userId) {

@@ -27,7 +27,7 @@ public class FacebookLoginAction extends ActionBase {
 	}
 
 	@Override
-	public String run() {
+	protected void execute() {
 		boolean remember = !"0".equals(req.queryParams("remember"));
 		AppConfig config = new AppConfig();
 		String secretState = config.get("facebook.state") + new Random().nextInt(999999);
@@ -42,7 +42,6 @@ public class FacebookLoginAction extends ActionBase {
 		String url = oauth.getAuthorizationUrl();
 		handles.push(secretState, new FacebookHandle(oauth, facebookUrl, authPlugin, remember));
 		res.redirect(url);
-		return "";
 	}
 	
 	public static FacebookHandle pop(String key) {

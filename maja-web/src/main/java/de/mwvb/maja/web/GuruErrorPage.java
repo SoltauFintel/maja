@@ -3,17 +3,27 @@ package de.mwvb.maja.web;
 import org.pmw.tinylog.Logger;
 
 public class GuruErrorPage extends ActionBase implements ErrorPage {
-	private Exception exception;
+	protected Exception exception;
+	protected String msg;
 	
 	@Override
 	public void setException(Exception exception) {
 		this.exception = exception;
+		if (exception.getMessage() == null || exception.getMessage().trim().isEmpty()) {
+			msg = exception.getClass().getName();
+		} else {
+			msg = esc(exception.getMessage());
+		}
 	}
 
 	@Override
-	public String run() {
+	protected void execute() {
 		Logger.error(exception);
 		res.status(500);
+	}
+	
+	@Override
+	protected String render() {
 		return "<!doctype html>\n" + 
 			"<html lang=\"de\" xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
 			"<head>\n" +
@@ -35,7 +45,7 @@ public class GuruErrorPage extends ActionBase implements ErrorPage {
 			"</head>\n" +
 			"<body>\n" +
 			"	<h1>ERROR</h1>\n" + 
-			"	<p>" + new Escaper().esc(exception.getMessage()) + "</p>\n" +
+			"	<p>" + msg + "</p>\n" +
 			"</body>\n" +
 			"</html>";
 	}

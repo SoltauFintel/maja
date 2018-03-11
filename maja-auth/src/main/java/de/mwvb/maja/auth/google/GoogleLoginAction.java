@@ -25,7 +25,7 @@ public class GoogleLoginAction extends ActionBase {
 	}
 
 	@Override
-	public String run() {
+	protected void execute() {
 		boolean remember = !"0".equals(req.queryParams("remember"));
 		AppConfig config = new AppConfig();
 		String secretState = config.get("google.state") + new Random().nextInt(999999);
@@ -46,7 +46,6 @@ public class GoogleLoginAction extends ActionBase {
 		String url2 = config.get("google.url");
 		handles.push(secretState, new FacebookHandle(oauth, url2, authPlugin, remember));
 		res.redirect(url);
-		return "";
 	}
 	
 	public static FacebookHandle pop(String key) {

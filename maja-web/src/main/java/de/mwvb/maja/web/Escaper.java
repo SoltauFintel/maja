@@ -1,9 +1,12 @@
 package de.mwvb.maja.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.pmw.tinylog.Logger;
 
 public class Escaper {
 
@@ -17,5 +20,14 @@ public class Escaper {
 	    return Normalizer.normalize(string.toLowerCase(), Form.NFD)
 	        .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
 	        .replaceAll("[^\\p{Alnum}]+", "-");
+	}
+	
+	public static String urlEncode(String text, String fallback) {
+		try {
+			return URLEncoder.encode(text, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			Logger.error(e);
+			return fallback;
+		}
 	}
 }
