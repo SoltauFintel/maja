@@ -43,7 +43,7 @@ public class GoogleCallbackAction extends ActionBase {
 		com.github.scribejava.core.model.Response response = oauth.execute(request);
 		if (response.getCode() == 200) {
 			String body = response.getBody();
-			GoogleLoginJSON reply = new ObjectMapper().readValue(body, GoogleLoginJSON.class);
+			GoogleLoginJSON reply = new ObjectMapper().readValue(body, GoogleLoginJSON.class); // TODO use Gson, not Jackson!
 			if (isValidReply(reply)) {
 				// User is now authorized by foreign service. Now inform the master (AuthPlugin) about it to do the rest.
 				return h.getAuthPlugin().login(req, res, reply.getDisplayName(), reply.getId(), "Google", h.isRememberMeWanted());

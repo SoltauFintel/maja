@@ -43,7 +43,7 @@ public class FacebookCallbackAction extends ActionBase {
 		com.github.scribejava.core.model.Response response = oauth.execute(request);
 		if (response.getCode() == 200) {
 			String body = response.getBody();
-			FacebookLoginJSON reply = new ObjectMapper().readValue(body, FacebookLoginJSON.class);
+			FacebookLoginJSON reply = new ObjectMapper().readValue(body, FacebookLoginJSON.class); // TODO use Gson, not Jackson!
 			if (isValidReply(reply)) {
 				// User is now authorized by foreign service. Now inform the master (AuthPlugin) about it to do the rest.
 				return h.getAuthPlugin().login(req, res, reply.getName(), reply.getId(), "Facebook", h.isRememberMeWanted());

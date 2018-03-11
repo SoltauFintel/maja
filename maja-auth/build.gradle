@@ -1,5 +1,5 @@
 dependencies {
 	compile project(':maja-web')
 	compile 'com.github.scribejava:scribejava-apis:4.2.0'
-	compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
+	compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2' // TODO use Gson, not Jackson!
 }
