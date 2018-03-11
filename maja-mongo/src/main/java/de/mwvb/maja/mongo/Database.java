@@ -21,6 +21,7 @@ public class Database {
 	private MongoClient client;
 	private Morphia morphia;
 	private Datastore ds;
+	private String name;
 	private static String info = "--";
 	
 	static {
@@ -53,6 +54,7 @@ public class Database {
 	 * Es muss also NICHT jede Entity Klasse angegeben werden!
 	 */
 	public Database(String dbhost, String name, String user, String password, Class<?> ... entityClasses) {
+		this.name = name;
 		List<MongoCredential> credentialsList = new ArrayList<>();
 		if (user != null && !user.isEmpty()) {
 			MongoCredential cred = MongoCredential.createCredential(user, name, password.toCharArray());
@@ -84,5 +86,9 @@ public class Database {
 	 */
 	public static String getInfo() {
 		return info;
+	}
+
+	public GridFSDAO openGridFSDAO(String collection) {
+		return new GridFSDAO(client.getDatabase(name), collection);
 	}
 }
