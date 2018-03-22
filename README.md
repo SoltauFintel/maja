@@ -18,7 +18,7 @@ see Maja example web app [tankstellen](https://github.com/SoltauFintel/tankstell
 Example for getting maja-auth-mongo with Gradle:
 
     // in dependencies:
-	compile 'com.github.soltaufintel.maja:maja-auth-mongo:0.2.0'
+	compile 'com.github.soltaufintel.maja:maja-auth-mongo:0.3.0'
 	
 	// in repositories:
 	maven { url 'https://jitpack.io' }
