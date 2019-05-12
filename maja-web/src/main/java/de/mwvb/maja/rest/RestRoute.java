@@ -25,7 +25,14 @@ public class RestRoute<T> implements Route {
 		info(req);
 		AbstractRestService<T> restService = create();
 		init(req, res, restService);
-		Object response = callMethod(restService, req);
+		Object response;
+		try {
+			response = callMethod(restService, req);
+		} catch (Exception e) {
+			Logger.error(e); // The detail error message should also be within the REST service.
+			res.status(500);
+			response = new ErrorMessage(e); // The caller needs the error message.
+		}
 		return render(response, res);
 	}
 
