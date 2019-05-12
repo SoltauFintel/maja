@@ -1,5 +1,6 @@
 package de.mwvb.maja.rest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Path;
@@ -60,7 +61,7 @@ public abstract class AbstractRestApp extends AbstractWebApp {
 			case 1: // typically methods for verbs PUT or POST
 				route = new RestRoute<T>(restServiceClass, method) {
 					@Override
-					protected Object callMethod(AbstractRestService<T> restService, Request req) throws Exception {
+					protected Object callMethod(AbstractRestService<T> restService, Request req) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 						return callMethod1T(restService, req);
 					}
 				};

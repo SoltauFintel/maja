@@ -6,7 +6,7 @@ public class ErrorMessage {
 	private final String message;
 	private final String errorClass;
 	
-	public ErrorMessage(Exception e) {
+	public ErrorMessage(Throwable e) {
 		message = e.getMessage();
 		errorClass = e.getClass().getSimpleName();
 	}

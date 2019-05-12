@@ -1,5 +1,6 @@
 package de.mwvb.maja.rest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.pmw.tinylog.Logger;
@@ -28,6 +29,10 @@ public class RestRoute<T> implements Route {
 		Object response;
 		try {
 			response = callMethod(restService, req);
+		} catch (InvocationTargetException e) {
+			Logger.error(e.getCause()); // The detail error message should also be within the REST service.
+			res.status(500);
+			response = new ErrorMessage(e.getCause()); // The caller needs the error message.
 		} catch (Exception e) {
 			Logger.error(e); // The detail error message should also be within the REST service.
 			res.status(500);
@@ -56,12 +61,12 @@ public class RestRoute<T> implements Route {
 		rest.init(req, res);
 	}
 	
-	protected Object callMethod(AbstractRestService<T> restService, Request req) throws Exception {
+	protected Object callMethod(AbstractRestService<T> restService, Request req) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		return _method.invoke(restService);
 	}
 	
-	/** invoke with 1 arg of type T */
-	protected Object callMethod1T(AbstractRestService<T> restService, Request req) throws Exception {
+	/** invoke with 1 arg of type T */ 
+	protected Object callMethod1T(AbstractRestService<T> restService, Request req) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		T t = new Gson().fromJson(req.body(), restService.getEntityClass());
 		return _method.invoke(restService, t);
 	}
