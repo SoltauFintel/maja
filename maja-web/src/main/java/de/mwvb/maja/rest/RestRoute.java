@@ -30,11 +30,11 @@ public class RestRoute<T> implements Route {
 		try {
 			response = callMethod(restService, req);
 		} catch (InvocationTargetException e) {
-			Logger.error(e.getCause()); // The detail error message should also be within the REST service.
+			Logger.error(e.getCause(), _method.getName()); // The detail error message should also be within the REST service.
 			res.status(500);
 			response = new ErrorMessage(e.getCause()); // The caller needs the error message.
 		} catch (Exception e) {
-			Logger.error(e); // The detail error message should also be within the REST service.
+			Logger.error(e, _method.getName()); // The detail error message should also be within the REST service.
 			res.status(500);
 			response = new ErrorMessage(e); // The caller needs the error message.
 		}

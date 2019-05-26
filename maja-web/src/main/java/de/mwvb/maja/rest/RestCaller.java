@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.net.URI;
 
 import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -21,6 +21,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 public class RestCaller {
+    private final String authorization;
+    
+    public RestCaller() {
+        this(null);
+    }
+
+    public RestCaller(String authorization) {
+        this.authorization = authorization;
+    }
 
 	/** Create */
 	public String post(String url, String body) throws IOException {
@@ -64,7 +73,8 @@ public class RestCaller {
 		return request(url, new HttpDelete(url));
 	}
 	
-	private String request(String url, HttpRequest request) throws IOException {
+	private String request(String url, HttpRequestBase request) throws IOException {
+        init(request);
 		try (CloseableHttpClient httpClient = HttpClients.custom().build()) {
 			URI uri = URI.create(url);
 			HttpResponse response = httpClient.execute(
@@ -78,7 +88,7 @@ public class RestCaller {
 				String json = EntityUtils.toString(response.getEntity());
 				try {
 					ErrorMessage msg = new Gson().fromJson(json, ErrorMessage.class);
-					throw new RestException(msg);
+					throw new RestException(msg, status);
 				} catch (JsonSyntaxException fallthru) {
 				}
 			}
@@ -90,4 +100,10 @@ public class RestCaller {
 			return EntityUtils.toString(response.getEntity());
 		}
 	}
+    
+    protected void init(HttpRequestBase request) {
+        if (authorization != null) {
+            request.setHeader("Authorization", authorization);
+        }
+    }
 }
