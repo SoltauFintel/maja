@@ -72,9 +72,11 @@ public class RestRoute<T> implements Route {
 	}
 
 	protected String render(Object response, Response res) {
-		if (response instanceof String) {
+	    if (response == null) {
+	        return "";
+	    } else if (response instanceof String) {
 			return (String) response;
-		}
+		} 
 		res.type("application/json");
 		return new Gson().toJson(response);
 	}
