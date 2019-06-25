@@ -38,6 +38,14 @@ public class RestCaller {
 		return request(url, post);
 	}
 
+	public String post(String url, String body, String mediaType) throws IOException {
+        HttpPost post = new HttpPost(url);
+        StringEntity entity = new StringEntity(body);
+        entity.setContentType(mediaType);
+        post.setEntity(entity);
+        return request(url, post);
+    }
+
 	/** Create object */
 	public String post(String url, Object object) throws IOException {
 		String json = new Gson().toJson(object);
@@ -73,7 +81,7 @@ public class RestCaller {
 		return request(url, new HttpDelete(url));
 	}
 	
-	private String request(String url, HttpRequestBase request) throws IOException {
+	protected final String request(String url, HttpRequestBase request) throws IOException {
         init(request);
         CloseableHttpClient httpClient = createClient();
 		try {
@@ -113,8 +121,12 @@ public class RestCaller {
 	}
     
     protected void init(HttpRequestBase request) {
-        if (authorization != null) {
-            request.setHeader("Authorization", authorization);
+        if (getAuthorization() != null) {
+            request.setHeader("Authorization", getAuthorization());
         }
+    }
+    
+    protected String getAuthorization() {
+        return authorization;
     }
 }
