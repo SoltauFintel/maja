@@ -75,7 +75,8 @@ public class RestCaller {
 	
 	private String request(String url, HttpRequestBase request) throws IOException {
         init(request);
-		try (CloseableHttpClient httpClient = HttpClients.custom().build()) {
+        CloseableHttpClient httpClient = createClient();
+		try {
 			URI uri = URI.create(url);
 			HttpResponse response = httpClient.execute(
 					new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme()),
@@ -98,7 +99,17 @@ public class RestCaller {
 			
 			// Return response as String or JSON.
 			return EntityUtils.toString(response.getEntity());
+		} finally {
+		    closeClient(httpClient);
 		}
+	}
+	
+	protected CloseableHttpClient createClient() {
+	    return HttpClients.custom().build();
+	}
+	
+	protected void closeClient(CloseableHttpClient client) throws IOException {
+	    client.close();
 	}
     
     protected void init(HttpRequestBase request) {
