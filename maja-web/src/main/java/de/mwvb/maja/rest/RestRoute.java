@@ -13,10 +13,10 @@ import spark.Response;
 import spark.Route;
 
 public class RestRoute<T> implements Route {
-	private final Class<? extends AbstractRestService<T>> restServiceClass;
+	private final Class<? extends AbstractNoEntityRestService> restServiceClass;
 	private final Method _method;
 
-	public RestRoute(Class<? extends AbstractRestService<T>> restServiceClass, Method method) {
+	public RestRoute(Class<? extends AbstractNoEntityRestService> restServiceClass, Method method) {
 		this.restServiceClass = restServiceClass;
 		this._method = method;
 	}
@@ -24,7 +24,7 @@ public class RestRoute<T> implements Route {
 	@Override
 	public Object handle(Request req, Response res) throws Exception {
 		info(req);
-		AbstractRestService<T> restService = create();
+		AbstractNoEntityRestService restService = create();
 		init(req, res, restService);
 		Object response;
 		try {
@@ -53,15 +53,15 @@ public class RestRoute<T> implements Route {
 		return _method.getName();
 	}
 	
-	protected AbstractRestService<T> create() throws Exception {
+	protected AbstractNoEntityRestService create() throws Exception {
 		return restServiceClass.newInstance();
 	}
 	
-	protected void init(Request req, Response res, AbstractRestService<?> rest) {
+	protected void init(Request req, Response res, AbstractNoEntityRestService rest) {
 		rest.init(req, res);
 	}
 	
-	protected Object callMethod(AbstractRestService<T> restService, Request req) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	protected Object callMethod(AbstractNoEntityRestService restService, Request req) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		return _method.invoke(restService);
 	}
 	

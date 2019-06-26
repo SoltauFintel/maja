@@ -19,7 +19,7 @@ public abstract class AbstractRestApp extends AbstractWebApp {
 	//      unten stehenden Code enthält.
 	// TODO Doku Erzeugungs Modus (Swagger)
 	
-	protected <T> void addRestService(Class<? extends AbstractRestService<T>> restServiceClass) {
+	protected <T> void addRestService(Class<? extends AbstractNoEntityRestService> restServiceClass) {
 		RestService classpath = restServiceClass.getAnnotation(RestService.class);
 		if (classpath == null) {
 			throw new RuntimeException("REST service class " + restServiceClass.getName() + " must be annotated with @" + RestService.class.getSimpleName());
@@ -51,7 +51,7 @@ public abstract class AbstractRestApp extends AbstractWebApp {
 		}
 	}
 	
-	protected <T> Route createRoute(Class<? extends AbstractRestService<T>> restServiceClass, Method method) {
+	protected <T> Route createRoute(Class<? extends AbstractNoEntityRestService> restServiceClass, Method method) {
 		RestRoute<T> route;
 		int args = method.getParameterCount();
 		switch (args) {
@@ -60,9 +60,14 @@ public abstract class AbstractRestApp extends AbstractWebApp {
 				break;
 			case 1: // typically methods for verbs PUT or POST
 				route = new RestRoute<T>(restServiceClass, method) {
-					@Override
-					protected Object callMethod(AbstractRestService<T> restService, Request req) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-						return callMethod1T(restService, req);
+					@SuppressWarnings("unchecked")
+                    @Override
+					protected Object callMethod(AbstractNoEntityRestService restService, Request req) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+					    if (restService instanceof AbstractRestService) {
+					        return callMethod1T((AbstractRestService<T>) restService, req);
+					    } else {
+					        return super.callMethod(restService, req);
+					    }
 					}
 				};
 				break;
