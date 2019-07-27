@@ -7,6 +7,7 @@ import java.nio.file.Path;
 
 import de.mwvb.maja.httpverb.DELETE;
 import de.mwvb.maja.httpverb.GET;
+import de.mwvb.maja.httpverb.PATCH;
 import de.mwvb.maja.httpverb.POST;
 import de.mwvb.maja.httpverb.PUT;
 import de.mwvb.maja.web.AbstractWebApp;
@@ -43,6 +44,10 @@ public abstract class AbstractRestApp extends AbstractWebApp {
 					DELETE path = method.getAnnotation(DELETE.class);
 					Spark.delete(classpath.value() + path.value(), createRoute(restServiceClass, method));
 					n++;
+                } else if (method.isAnnotationPresent(PATCH.class)) {
+                    PATCH path = method.getAnnotation(PATCH.class);
+                    Spark.patch(classpath.value() + path.value(), createRoute(restServiceClass, method));
+                    n++;
 				}
 			}
 		}
