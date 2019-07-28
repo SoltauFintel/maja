@@ -7,6 +7,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -76,6 +77,17 @@ public class RestCaller {
 		return put(url, json);
 	}
 
+    public String patch(String url, String body) throws IOException {
+        HttpPatch patch = new HttpPatch(url);
+        patch.setEntity(new StringEntity(body));
+        return request(url, patch);
+    }
+    
+    public String patch(String url, Object object) throws IOException {
+        String json = new Gson().toJson(object);
+        return patch(url, json);
+    }
+
 	/** Delete */
 	public String delete(String url) throws IOException {
 		return request(url, new HttpDelete(url));
@@ -101,7 +113,7 @@ public class RestCaller {
 				} catch (JsonSyntaxException fallthru) {
 				}
 			}
-			if (status != HttpStatus.OK_200) {
+			if (status < 200 || status > 299) { // Status 2xx is okay.
 				throw new RestStatusException(status);
 			}
 			

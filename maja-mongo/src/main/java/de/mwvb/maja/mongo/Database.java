@@ -42,7 +42,11 @@ public class Database {
 				+ (config.hasFilledKey("dbuser") ? (" with user " + dbuser + (config.hasFilledKey("dbpw")
 						? " with password" : "")) : ""));
 	}
-	
+
+    public Database(String dbhost, String name, String user, String password, Class<?>... entityClasses) {
+        this(dbhost, name, user, password, false, entityClasses);
+    }
+
 	/**
 	 * Öffnet Datenbank.
 	 * 
@@ -50,10 +54,11 @@ public class Database {
 	 * @param name Name der MongoDB Datenbank
 	 * @param user Datenbank Benutzername, null or leer wenn nicht erforderlich
 	 * @param password Kennwort des Datenbank Benutzers, null or leer wenn nicht erforderlich
+	 * @param ensureCaps initialize capped collections
 	 * @param entityClasses Für jedes Package eine Klasse, damit das Package registriert wird.
 	 * Es muss also NICHT jede Entity Klasse angegeben werden!
 	 */
-	public Database(String dbhost, String name, String user, String password, Class<?> ... entityClasses) {
+	public Database(String dbhost, String name, String user, String password, boolean ensureCaps, Class<?> ... entityClasses) {
 		this.name = name;
 		List<MongoCredential> credentialsList = new ArrayList<>();
 		if (user != null && !user.isEmpty()) {
@@ -67,6 +72,9 @@ public class Database {
 			morphia.mapPackageFromClass(entityClass);
 		}
 		ds.ensureIndexes();
+		if (ensureCaps) {
+		    ds.ensureCaps();
+		}
 		info = dbhost + "/" + name + (user == null || user.isEmpty() ? "" : "/" + user);
 	}
 	
