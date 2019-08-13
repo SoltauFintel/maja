@@ -17,7 +17,7 @@ import redis.clients.jedis.Jedis;
  * @param <VALUE_TYPE> a class type, sometimes just String
  */
 public class CacheTK<KEY_TYPE, VALUE_TYPE> {
-	private final Jedis redis;
+	private final Jedis redis; // TODO auf JedisPool umstellen, vgl. tvprogramm.HtmlCache
 	private final Translator<KEY_TYPE> translator;
 	private final int expirationTime;
 	
