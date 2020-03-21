@@ -12,8 +12,7 @@ import com.github.template72.data.DataMap;
 import spark.Spark;
 
 /**
- * The page of this action has the file name "src/main/resources/templates/{this
- * class name}.html". Use put() to add data within execute().
+ * The page of this action has the file name "src/main/resources/templates/{this class name}.html". Use put() to add data within execute().
  */
 public abstract class Action extends ActionBase {
     public static CompiledTemplates templates;

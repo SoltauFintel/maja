@@ -167,7 +167,7 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
             return msg;
         }
 
-        String longId = service + "#" + foreignId;
+        String longId = getLongId(service, foreignId);
         setLoginData(true, name, longId, req.session());
         rememberMe.rememberMe(rememberMeWanted, res, name, longId);
         if (isDebugLogging()) {
@@ -182,6 +182,10 @@ public class AuthPlugin implements de.mwvb.maja.web.AuthPlugin, Filter {
         req.session().removeAttribute("uri");
         res.redirect(uri);
         return "";
+    }
+    
+    protected String getLongId(String service, String foreignId) {
+        return service + "#" + foreignId;
     }
 
     protected void logLogin(String name, String userId) {

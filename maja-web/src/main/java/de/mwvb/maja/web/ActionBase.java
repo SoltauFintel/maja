@@ -6,9 +6,9 @@ import spark.Response;
 /**
  * Pageless Action
  * 
- * You can access Request (req) and Response (res) within run(). Prefer the
+ * <p>You can access Request (req) and Response (res) within run(). Prefer the
  * Action class if the action has got a page. Use this class for pageless
- * actions, e.g. save actions that redirect to another page.
+ * actions, e.g. save actions that redirect to another page.</p>
  */
 public abstract class ActionBase {
     public static Escaper escaper = new Escaper();

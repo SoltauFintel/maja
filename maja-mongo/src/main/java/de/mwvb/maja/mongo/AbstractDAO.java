@@ -1,7 +1,10 @@
 package de.mwvb.maja.mongo;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.zip.CRC32;
 
@@ -61,9 +64,13 @@ public abstract class AbstractDAO<E> {
         return createQuery().count();
     }
 
-    @SuppressWarnings("unchecked")
-    public List<String> distinct(String fieldname) {
-        return new ArrayList<String>(getCollection().distinct(fieldname));
+    public Set<String> distinct(String fieldname) {
+        List<?> distinct = getCollection().distinct(fieldname);
+        Set<String> set = new TreeSet<>((a, b) -> a.compareToIgnoreCase(b));
+        for (Object o : distinct) {
+            set.add((String) o);
+        }
+        return set;
     }
 
     protected final Query<E> createQuery() {
@@ -124,5 +131,11 @@ public abstract class AbstractDAO<E> {
                 throw new RuntimeException("Illegal id");
             }
         }
+    }
+    
+    protected final Map<String, Object> toMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
     }
 }

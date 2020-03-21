@@ -26,7 +26,7 @@ public abstract class BaseTimer implements org.quartz.Job {
 
             config();
 
-            Logger.info(getClass().getSimpleName() + " gestartet. cron: " + cron);
+            Logger.info(getClass().getSimpleName() + " started. cron: " + cron);
         } catch (SchedulerException e) {
             Logger.error(e);
         }

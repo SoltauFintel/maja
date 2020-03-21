@@ -15,7 +15,7 @@ import com.mongodb.ServerAddress;
 import de.mwvb.maja.web.AppConfig;
 
 /**
- * Zugriff auf MongoDB
+ * MongoDB access
  */
 public class Database {
     private MongoClient client;
@@ -49,18 +49,14 @@ public class Database {
     }
 
     /**
-     * Öffnet Datenbank.
+     * Opens database
      * 
-     * @param dbhost        z.B. "localhost"
-     * @param name          Name der MongoDB Datenbank
-     * @param user          Datenbank Benutzername, null or leer wenn nicht
-     *                      erforderlich
-     * @param password      Kennwort des Datenbank Benutzers, null or leer wenn
-     *                      nicht erforderlich
+     * @param dbhost        e.g. "localhost"
+     * @param name          name of MongoDB database
+     * @param user          database user name, null or empty if not necessary
+     * @param password      password of the database user, null or empty if not necessary
      * @param ensureCaps    initialize capped collections
-     * @param entityClasses Für jedes Package eine Klasse, damit das Package
-     *                      registriert wird. Es muss also NICHT jede Entity Klasse
-     *                      angegeben werden!
+     * @param entityClasses for each package one class for registering that package. So it's not necessary to specify all classes.
      */
     public Database(String dbhost, String name, String user, String password, boolean ensureCaps,
             Class<?>... entityClasses) {
@@ -95,7 +91,7 @@ public class Database {
     }
 
     /**
-     * @return Host/Name/User of last opened database
+     * @return Host/name/user of last opened database
      */
     public static String getInfo() {
         return info;
