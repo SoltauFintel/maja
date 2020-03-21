@@ -71,7 +71,10 @@ public abstract class AbstractWebApp {
         } else if ("OFF".equalsIgnoreCase(loglevel)) {
             level = Level.OFF;
         }
-        Configurator.currentConfig().writer(new ConsoleWriter()).formatPattern("{date}  {message}").level(level)
+        Configurator.currentConfig()
+                .writer(new ConsoleWriter())
+                .formatPattern("{date}  {message}")
+                .level(level)
                 .activate();
     }
 

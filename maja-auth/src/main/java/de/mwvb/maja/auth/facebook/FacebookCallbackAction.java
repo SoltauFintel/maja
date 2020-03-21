@@ -3,12 +3,11 @@ package de.mwvb.maja.auth.facebook;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import com.google.gson.Gson;
 
 import de.mwvb.maja.web.ActionBase;
 import spark.Request;
@@ -44,7 +43,7 @@ public class FacebookCallbackAction extends ActionBase {
         com.github.scribejava.core.model.Response response = oauth.execute(request);
         if (response.getCode() == 200) {
             String body = response.getBody();
-            FacebookLoginJSON reply = new ObjectMapper().readValue(body, FacebookLoginJSON.class); // TODO use Gson, not Jackson!
+            FacebookLoginJSON reply = new Gson().fromJson(body, FacebookLoginJSON.class);
             if (isValidReply(reply)) {
                 // User is now authorized by foreign service. Now inform the master (AuthPlugin)
                 // about it to do the rest.
