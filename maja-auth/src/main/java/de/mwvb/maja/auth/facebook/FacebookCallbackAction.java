@@ -33,7 +33,7 @@ public class FacebookCallbackAction extends ActionBase {
         }
     }
 
-    private String login(Request req, spark.Response res, FacebookHandle h)
+    protected String login(Request req, spark.Response res, FacebookHandle h)
             throws IOException, InterruptedException, ExecutionException {
         String code = req.queryParams("code");
         OAuth20Service oauth = h.getOauth();
@@ -57,31 +57,31 @@ public class FacebookCallbackAction extends ActionBase {
         }
     }
 
-    private boolean isValidReply(FacebookLoginJSON reply) {
+    protected boolean isValidReply(FacebookLoginJSON reply) {
         return reply != null && reply.getName() != null && !reply.getName().trim().isEmpty() && reply.getId() != null
                 && !reply.getId().trim().isEmpty();
     }
 
-    static class FacebookLoginJSON {
+    public static class FacebookLoginJSON {
         private String name;
         private String id;
 
-        FacebookLoginJSON() {
+        public FacebookLoginJSON() {
         }
 
-        String getName() {
+        public String getName() {
             return name;
         }
 
-        void setName(String name) {
+        public void setName(String name) {
             this.name = name;
         }
 
-        String getId() {
+        public String getId() {
             return id;
         }
 
-        void setId(String id) {
+        public void setId(String id) {
             this.id = id;
         }
     }

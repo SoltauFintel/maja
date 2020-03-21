@@ -31,7 +31,7 @@ public class GoogleCallbackAction extends ActionBase {
         }
     }
 
-    private String login(Request req, spark.Response res, FacebookHandle h)
+    protected String login(Request req, spark.Response res, FacebookHandle h)
             throws IOException, InterruptedException, ExecutionException {
         String code = req.queryParams("code");
         OAuth20Service oauth = h.getOauth();
@@ -55,34 +55,34 @@ public class GoogleCallbackAction extends ActionBase {
         }
     }
 
-    private boolean isValidReply(GoogleLoginJSON reply) {
+    protected boolean isValidReply(GoogleLoginJSON reply) {
         return reply != null && reply.getDisplayName() != null && !reply.getDisplayName().trim().isEmpty()
                 && reply.getId() != null && !reply.getId().trim().isEmpty();
     }
 
     // Jackson annotation was used -> @JsonIgnoreProperties(ignoreUnknown = true)
     // Don't know if this works with Gson.
-    static class GoogleLoginJSON {
+    public static class GoogleLoginJSON {
         private String displayName;
         private String id;
         // TODO Feld "emails" enthält Array aus Objekten, die wiederum ein Feld "value" haben. Darin steht die Emailadresse.
 
-        GoogleLoginJSON() {
+        public GoogleLoginJSON() {
         }
 
-        String getDisplayName() {
+        public String getDisplayName() {
             return displayName;
         }
 
-        void setDisplayName(String displayName) {
+        public void setDisplayName(String displayName) {
             this.displayName = displayName;
         }
 
-        String getId() {
+        public String getId() {
             return id;
         }
 
-        void setId(String id) {
+        public void setId(String id) {
             this.id = id;
         }
     }
