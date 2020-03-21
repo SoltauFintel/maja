@@ -7,8 +7,8 @@ import de.mwvb.maja.auth.BaseAuthorization;
  */
 public class FacebookAuthorization extends BaseAuthorization {
 
-	@Override
-	protected String getService() {
-		return "Facebook";
-	}
+    @Override
+    protected String getService() {
+        return "Facebook";
+    }
 }

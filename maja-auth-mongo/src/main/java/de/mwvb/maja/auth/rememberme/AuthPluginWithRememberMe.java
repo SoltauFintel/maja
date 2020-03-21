@@ -4,7 +4,7 @@ import de.mwvb.maja.auth.AuthPlugin;
 
 public class AuthPluginWithRememberMe extends AuthPlugin {
 
-	public AuthPluginWithRememberMe() {
-		super(new RememberMeInMongoDB());
-	}
+    public AuthPluginWithRememberMe() {
+        super(new RememberMeInMongoDB());
+    }
 }

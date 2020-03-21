@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface GET {
 
-	/** Path */
-	String value() default "";
+    /** Path */
+    String value() default "";
 }

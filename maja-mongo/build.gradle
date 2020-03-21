@@ -1,5 +1,5 @@
 dependencies {
-	compile project(':maja-web')
-	compile 'org.mongodb.morphia:morphia:1.3.2'
-	compile 'org.mongodb.morphia:morphia-logging-slf4j:1.3.2'
+    compile project(':maja-web')
+    compile 'org.mongodb.morphia:morphia:1.3.2'
+    compile 'org.mongodb.morphia:morphia-logging-slf4j:1.3.2'
 }

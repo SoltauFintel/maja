@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface DELETE {
 
-	/** Path */
-	String value() default "";
+    /** Path */
+    String value() default "";
 }

@@ -5,7 +5,7 @@ package de.mwvb.maja.auth.rememberme;
  */
 public interface IKnownUser {
 
-	String getUser();
+    String getUser();
 
-	String getUserId();
+    String getUserId();
 }

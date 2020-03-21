@@ -17,75 +17,77 @@ import spark.Request;
  * Facebook replies to this action/route.
  */
 public class FacebookCallbackAction extends ActionBase {
-	private static final String KEY = "state";
+    private static final String KEY = "state";
 
-	@Override
-	public String run() {
-		String key = req.queryParams(KEY);
-		FacebookHandle handle = FacebookLoginAction.pop(key);
-		if (handle == null) {
-			throw new RuntimeException("Login tooks too long!");
-			// host= Eintrag in AppConfig.properties könnte falsch sein.
-		}
-		try {
-			return login(req, res, handle);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	private String login(Request req, spark.Response res, FacebookHandle h) throws IOException, InterruptedException, ExecutionException {
-		String code = req.queryParams("code");
-		OAuth20Service oauth = h.getOauth();
-		OAuth2AccessToken accessToken = oauth.getAccessToken(code);
-		OAuthRequest request = new OAuthRequest(Verb.GET, h.getFacebookUrl());
-		oauth.signRequest(accessToken, request);
-		com.github.scribejava.core.model.Response response = oauth.execute(request);
-		if (response.getCode() == 200) {
-			String body = response.getBody();
-			FacebookLoginJSON reply = new ObjectMapper().readValue(body, FacebookLoginJSON.class); // TODO use Gson, not Jackson!
-			if (isValidReply(reply)) {
-				// User is now authorized by foreign service. Now inform the master (AuthPlugin) about it to do the rest.
-				return h.getAuthPlugin().login(req, res, reply.getName(), reply.getId(), "Facebook", h.isRememberMeWanted());
-			} else {
-				throw new RuntimeException("Facebook login response code is 200, but response is empty!\n" + body);
-			}
-		} else {
-			throw new RuntimeException("Facebook login response code: " + response.getCode());
-		}
-	}
+    @Override
+    public String run() {
+        String key = req.queryParams(KEY);
+        FacebookHandle handle = FacebookLoginAction.pop(key);
+        if (handle == null) {
+            throw new RuntimeException("Login tooks too long!");
+            // host= Eintrag in AppConfig.properties könnte falsch sein.
+        }
+        try {
+            return login(req, res, handle);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	private boolean isValidReply(FacebookLoginJSON reply) {
-		return reply != null
-				&& reply.getName() != null && !reply.getName().trim().isEmpty()
-				&& reply.getId() != null && !reply.getId().trim().isEmpty();
-	}
+    private String login(Request req, spark.Response res, FacebookHandle h)
+            throws IOException, InterruptedException, ExecutionException {
+        String code = req.queryParams("code");
+        OAuth20Service oauth = h.getOauth();
+        OAuth2AccessToken accessToken = oauth.getAccessToken(code);
+        OAuthRequest request = new OAuthRequest(Verb.GET, h.getFacebookUrl());
+        oauth.signRequest(accessToken, request);
+        com.github.scribejava.core.model.Response response = oauth.execute(request);
+        if (response.getCode() == 200) {
+            String body = response.getBody();
+            FacebookLoginJSON reply = new ObjectMapper().readValue(body, FacebookLoginJSON.class); // TODO use Gson, not Jackson!
+            if (isValidReply(reply)) {
+                // User is now authorized by foreign service. Now inform the master (AuthPlugin)
+                // about it to do the rest.
+                return h.getAuthPlugin().login(req, res, reply.getName(), reply.getId(), "Facebook",
+                        h.isRememberMeWanted());
+            } else {
+                throw new RuntimeException("Facebook login response code is 200, but response is empty!\n" + body);
+            }
+        } else {
+            throw new RuntimeException("Facebook login response code: " + response.getCode());
+        }
+    }
 
-	static class FacebookLoginJSON {
-		private String name;
-		private String id;
+    private boolean isValidReply(FacebookLoginJSON reply) {
+        return reply != null && reply.getName() != null && !reply.getName().trim().isEmpty() && reply.getId() != null
+                && !reply.getId().trim().isEmpty();
+    }
 
-		FacebookLoginJSON() {
-		}
-		
-		String getName() {
-			return name;
-		}
+    static class FacebookLoginJSON {
+        private String name;
+        private String id;
 
-		void setName(String name) {
-			this.name = name;
-		}
+        FacebookLoginJSON() {
+        }
 
-		String getId() {
-			return id;
-		}
+        String getName() {
+            return name;
+        }
 
-		void setId(String id) {
-			this.id = id;
-		}
-	}
+        void setName(String name) {
+            this.name = name;
+        }
 
-	@Override
-	protected void execute() {
-	}
+        String getId() {
+            return id;
+        }
+
+        void setId(String id) {
+            this.id = id;
+        }
+    }
+
+    @Override
+    protected void execute() {
+    }
 }
