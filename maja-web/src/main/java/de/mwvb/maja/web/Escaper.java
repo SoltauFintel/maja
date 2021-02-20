@@ -16,12 +16,18 @@ public class Escaper {
     }
 
     public static String toPrettyURL(String string) {
+        if (string == null) {
+            return string;
+        }
         // https://stackoverflow.com/a/4581526/3478021
         return Normalizer.normalize(string.toLowerCase(), Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
                 .replaceAll("[^\\p{Alnum}]+", "-");
     }
 
     public static String urlEncode(String text, String fallback) {
+        if (text == null) {
+            return fallback;
+        }
         try {
             return URLEncoder.encode(text, "UTF-8");
         } catch (UnsupportedEncodingException e) {
