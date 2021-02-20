@@ -21,6 +21,13 @@ import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 import org.pmw.tinylog.writers.ConsoleWriter;
 
+import com.github.template72.compiler.CompiledTemplates;
+import com.github.template72.compiler.TemplateCompiler;
+import com.github.template72.compiler.TemplateCompilerBuilder;
+import com.github.template72.loader.ResourceTemplateLoader;
+import com.github.template72.loader.TemplateFileCache;
+import com.github.template72.loader.TemplateLoader;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -42,6 +49,10 @@ public abstract class AbstractWebApp {
     protected AppConfig config;
     protected AuthPlugin auth;
 
+    /**
+     * Call this from your main() method to start the web application.
+     * @param appVersion version of application
+     */
     public void start(String appVersion) {
         initLogging();
         initConfig();
@@ -139,6 +150,17 @@ public abstract class AbstractWebApp {
      */
     protected void init() {
         auth = new NoOpAuthPlugin();
+    }
+    
+    protected void compileTemplates(String ... templateFilenames) {
+        TemplateLoader loader = new ResourceTemplateLoader() {
+            @Override
+            public String charsetName() {
+                return "UTF-8";
+            }
+        };
+        TemplateCompiler compiler = new TemplateCompilerBuilder().withLoader(loader).build();
+        Action.templates = new CompiledTemplates(compiler, new TemplateFileCache(), config.isDevelopment(), templateFilenames);
     }
 
     protected void defaultRoutes() {
