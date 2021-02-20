@@ -152,7 +152,12 @@ public abstract class AbstractWebApp {
     
     protected void compileTemplates(String ... templateFilenames) {
         TemplateCompiler compiler = new TemplateCompilerBuilder().withUTF8Loader().build();
-        Action.templates = new CompiledTemplates(compiler, new TemplateFileCache(), config.isDevelopment(), templateFilenames);
+        Action.templates = new CompiledTemplates(compiler, new TemplateFileCache(), config.isDevelopment(), templateFilenames) {
+            @Override
+            protected void handleException(String templateFilename, RuntimeException e) {
+                Logger.error("Template '" + templateFilename + "' can not be compiled: " + e.getMessage(), e);
+            }
+        };
     }
 
     protected void defaultRoutes() {
