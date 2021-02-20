@@ -2,6 +2,7 @@ package de.mwvb.maja.web;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collection;
 
 import org.pmw.tinylog.Logger;
 
@@ -24,6 +25,18 @@ public abstract class Action extends ActionBase {
 
     public void put(String name, boolean condition) {
         model.put(name, condition);
+    }
+    
+    public void putInt(String name, int number) {
+        model.putInt(name, number);
+    }
+    
+    public void putHas(String name, Object o) {
+        model.putHas(name, o);
+    }
+    
+    public void putSize(String name, Collection<?> collection) {
+        model.putSize(name, collection);
     }
 
     public DataList list(String name) {
