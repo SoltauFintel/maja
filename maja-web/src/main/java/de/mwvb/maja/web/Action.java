@@ -1,10 +1,6 @@
 package de.mwvb.maja.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Collection;
-
-import org.pmw.tinylog.Logger;
 
 import com.github.template72.compiler.CompiledTemplates;
 import com.github.template72.data.DataList;
@@ -68,11 +64,6 @@ public abstract class Action extends ActionBase {
     }
 
     public static String urlEncode(String text, String fallback) {
-        try {
-            return URLEncoder.encode(text, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            Logger.error(e);
-            return fallback;
-        }
+        return Escaper.urlEncode(text, fallback);
     }
 }
