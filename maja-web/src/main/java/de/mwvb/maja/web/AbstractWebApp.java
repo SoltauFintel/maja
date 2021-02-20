@@ -24,9 +24,7 @@ import org.pmw.tinylog.writers.ConsoleWriter;
 import com.github.template72.compiler.CompiledTemplates;
 import com.github.template72.compiler.TemplateCompiler;
 import com.github.template72.compiler.TemplateCompilerBuilder;
-import com.github.template72.loader.ResourceTemplateLoader;
 import com.github.template72.loader.TemplateFileCache;
-import com.github.template72.loader.TemplateLoader;
 
 import spark.Request;
 import spark.Response;
@@ -153,13 +151,7 @@ public abstract class AbstractWebApp {
     }
     
     protected void compileTemplates(String ... templateFilenames) {
-        TemplateLoader loader = new ResourceTemplateLoader() {
-            @Override
-            public String charsetName() {
-                return "UTF-8";
-            }
-        };
-        TemplateCompiler compiler = new TemplateCompilerBuilder().withLoader(loader).build();
+        TemplateCompiler compiler = new TemplateCompilerBuilder().withUTF8Loader().build();
         Action.templates = new CompiledTemplates(compiler, new TemplateFileCache(), config.isDevelopment(), templateFilenames);
     }
 
