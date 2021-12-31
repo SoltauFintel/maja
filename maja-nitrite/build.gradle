@@ -1,1 +1,4 @@
-//
+dependencies {
+    compile project(':maja-web')
+    compile 'org.dizitart:nitrite:3.4.3'
+}
