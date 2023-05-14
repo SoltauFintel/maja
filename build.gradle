@@ -1,5 +1,5 @@
 allprojects {
-	version = "0.4.0-B1"
+	version = "1.1.0"
 	group = 'de.mwvb.maja'
 }
 
